@@ -1,0 +1,37 @@
+1. the instructions related to this problem is:
+	0x0000000000544d6a <arith_driver+138>:	48 c1 ff 02	sar    $0x2,%rdi	rdi=0x4a85d2d0
+	0x0000000000544dfc <arith_driver+284>:	4a 8d 04 a5 02 00 00 00	lea    0x2(,%r12,4),%rax	rax=0x7fffffff73ab3b42
+
+2. 
+In data.c:
+
+DEFVAR_LISP ("most-negative-fixnum", Vmost_negative_fixnum,
+            doc: /* The smallest value that is representable in a Lisp integer.  */);
+// so 'most-positive-fixnum' has the value: Vmost_positive_fixnum
+
+Vmost_negative_fixnum = make_number (MOST_NEGATIVE_FIXNUM);
+// so Vmost_positive_fixnum has value of MOST_POSITIVE_FIXNUM
+
+
+In 'lisp.h':
+
+#define MOST_POSITIVE_FIXNUM (EMACS_INT_MAX >> INTTYPEBITS)
+
+INTTYPEBITS == 2
+
+// Since our system is x86-64, EMACS_INT_MAX will be the largest long: 0x7fffffffffffffff
+
+// so if we right shift INT_MAX by 2, we got:
+0x1fffffffffffffff, which is exactly 2305843009213693951
+
+3.
+MOST_POSITIVE_FIXNUM is 0x1fffffffffffffff, mutiliplying it self by three times gives us the lowest 64 bits 0x8000 0000 0000 0001. And then after shifting left and right for 2 bits, it gives us 0x0000 0000 0000 0001 which is 1.
+
+4.
+using -fwrapv, when the system dectects overflow, it will call a function, __ubsan_handle_add_overflow in testovf for example, to take care of the overflow. Also, -fwrapv doesnt give any error massage but only give warnings.
+
+5.
+"make-string 1000 ? X" makes a string of 1000 X
+"concat (make-string 1000 ? X) "0"" concatenates the previous string with a 0
+
+the program copies the string into another string for twice to make it into a time zone format. It is successful for the first time, but the seconde time, %rdi point outside of the stack while the program tries to copy the value in xmm7 into the stack, which causes the problem.

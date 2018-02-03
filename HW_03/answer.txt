@@ -1,0 +1,45 @@
+#68: A = 9, B = 5
+	
+	"movslq	8(%rsi), %rax" stores the value v1. Since it is a long, it needs to be aligned with 8. Thus the char array should make less or equal than 8 bytes and more or equal than 4 bytes.
+	
+		5 <= B * 1 <= 8
+
+	"addq	32(%rsi), %rax" adds v1 and v2 together. Since it is also a long, it needs to be aligned with 8. Thus, the int and the short array should take less or equal than 32-8 = 24 bytes and more or equal than 24 - 7 = 17 bytes.
+
+		17 <= 4 + 2 * A <= 24
+		7 <= A <= 10
+
+	"movq	%rax, 184(%rdi)" move v1 + v2 into p->y. Since it is also a long, it needs to be aligned with 8. Thus, the nested int array should take no more than 184 and no less than 184 - 7 = 177 
+
+		177 <= 4 * A * B <= 184
+		45 <= A * B <= 46
+
+	A = 7, 8, 9, 10
+	B = 5, 6, 7, 8
+	A * B = 45, 46
+
+	So, A = 9, B = 5, A * B = 45
+
+#70: 
+A.
+	e1.p	0	
+	e1.y	8
+	e2.x	0
+	e2.next	8
+
+B.
+	The strutre will require 16 bytes. 
+	Pointer to long or long will take 8 bytes, long or pointer to union will also take 8 bytes. So it will take total 16 bytes.
+
+C. 
+	up->e2.x = *(*(up->ex.next).e1.p) - *(up->e2.next).e1.y;
+
+	movq	8(%rsi), %rax		// its offset is 8, so it is e1.y or e2.next
+	
+	movq	(%rax), %rdx		// (%rax) means it is a pointer, so e2.next
+	
+	movq	(%rdx), %rdx		// its offset is 0, and it is a pointer, so e2.next->e1.p
+
+	subq	8(%rax), %rdx		// offset is 8, not a pointer, so e1.y
+
+	movq	%rdx, (%rdi)		// offset is 0, not pointer, so e2.x

@@ -1,0 +1,17 @@
+#2.89
+
+A. it always yields 1 
+since when int x converts to double dx it doesn't lose any information, so when they both convert to float, 
+they round and lose the same information
+
+B. it may yield 0
+when x is 0 and y is TMIN, x - y is not defined so it cannot be compared
+
+C. it always yield 1
+because dx dy dz is converted from an int, so they range from Tmin to Tmax. Thus, they are far from overflow.
+
+D. it may yield 0
+as in C, associative is not allowed in floating point multiplication. when dy and dz are big, dy * dz overflow and will wrap out. so (dx * dy) * dz != dx * (dy * dz)
+
+E. it may yield 0
+when dx is 0, dx/dx will be NaN which cannot be used in any comparison or calculation.

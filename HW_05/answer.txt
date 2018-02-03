@@ -1,0 +1,14 @@
+Name: Zhibang Chen
+UID: 804783490
+
+12.17
+A. The program doesn't use Pthread_join so that the main thread won't wait for
+the peer thread to terminate before its own termination. Thus, after creating the peer thread, the main thread terminated before the thread function can be executed.
+
+B. replace the exit(0) to Pthread_exit(NULL)
+
+
+12.25
+echo_cnt is thread_safe because it uses semaphore: P(&mutex) and V(&mutex) to protect the thread.
+echo_cnt is not reentrant because in each execution, it increases byte_cnt by n, where byte_cnt is defined as a global variable in the header file.
+

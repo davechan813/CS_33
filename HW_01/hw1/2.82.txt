@@ -1,0 +1,19 @@
+A.
+	When x = INT_MIN, y = 0, (x<y) is true, (-x>-y) is false because -INT_MIN involves an overflow and is still INT_MIN.
+
+B. 
+	it always yields 1. (x+y)<<1 = 2*x+2*y, so (x+y)<<4 = 16*x+16*y, so ((x+y)<<4) + y-x == 17*y+15*x
+
+C.
+	it always yields 1. ~x is equal to -(x+1), so ~(x+y) = -(x+y+1) = -x-1-y-1+1
+
+D.
+	it always returns 1. No matters they are unsigned or signed, their bit expressions don't change. After subtracting x from y, it changes into unsigned, which matches the result on the left hand side.
+E. 
+	it always returns 1. (x>>2)<<2 removes the last two digits of x while keeping the sign bit unchanged. If x has any 1 in the last two digits, then ((x>>2)<<2）will be less than x.
+
+F.
+	it always returns 1. x>>1 is a arithmetic shift because it is a signed int. ux>>1 is a logical shift, so the first bit is lost. ux & -1 << 31 = ux & 0x80000000, which is the first bit of number, so the left hand side and the right hand side are always the same.
+	
+G.
+	When x = -127, x%128 = -127 = 1111111110000001, x&127 = 1111111110000001 & 0000000001111111 = 1, 1!=-127, so it returns 0

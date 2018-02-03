@@ -1,0 +1,7 @@
+When a signed int is subtracted from an unsigned int, the signed int will first change into an unsigned int and then do the subtraction, which means the result will never be negative.
+
+void copy_int(int val, void *buf, int maxbytes) 
+{
+    if (maxbytes - ((int)sizeof(val)) >= 0)
+            memcpy(buf, (void *) &val, sizeof(val));
+}

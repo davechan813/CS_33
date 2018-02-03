@@ -1,0 +1,67 @@
+Name: Zhibang Chen
+UID: 804783490
+
+1.
+to exectue the file 
+	gdb ~eggert/bin64/bin/emacs-25.2
+
+set break point
+	(gdb) break Ftimes
+	Breakpoint 1 at 0x544fb0: file data.c, line 2815.
+
+to get the assembly-language in the third column, I use
+	(gdb) set disassemble-next-line on
+
+to save the instructions, use
+	(gdb) set logging on
+so that when quit gbd we can find all the instructions in gdb.txt
+
+to start running the program, use
+	(gdb) r -Q -batch -eval '(print (* 1250284240 -1844255039))'
+
+to skip to next instruction, use
+	(gdb) si
+
+to look at what value is in the registers, use
+	(gdb) info registers
+
+to see the value in one paricular, use
+	(gdb) info registers name
+for example,
+	(gdb) info registers rbx
+	rbx            0x7fffffffd608	140737488344584
+
+to see the value in a certain memory location, use
+	(gdb) x adress
+for example,
+	(gdb) x 0x0000000000501c87
+	0x501c87 <deliver_process_signal+23>:	0x1a2d8b48
+
+after several time of si, when <Ftimes+11> becomes <deliver_input_available_signal+0>, quit gdb
+	(gdb) q
+
+then we can open the log file
+	vim gdb.txt
+
+
+
+
+
+2.
+after searching on google, to get the assembly code, there are two ways
+	gcc -S [options] testovf.c
+	
+	or 
+	
+	gcc -c [options] testovf.c
+	objdump -d testovf.o > name.txt
+
+I use the first one.
+	gcc -S -O2 testovf.c
+	vim testovf.s
+
+	gcc -S -O2 -fwrapv testovf.c 
+	vim testovf.s
+
+	gcc -S -O2 -fsanitize=undefined testovf.c 
+	vim testovf.s
